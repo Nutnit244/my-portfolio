@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>แฟ้มสะสมผลงาน</title>
+    <link rel="icon" href="img/ณ.png" type="image/png">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <style>
+        @font-face {
+            font-family: 'Prompt-Medium';
+            src: url('asset/Prompt-Medium.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Prompt-Medium', sans-serif;
+            background-color: #fff;
+            color: #111;
+            margin: 0;
+            padding: 0;
+        }
+
+        .lang-switcher {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            /* left: 1rem; */
+            z-index: 999;
+        }
+
+        .lang-switcher button {
+            margin-right: 0.5rem;
+            padding: 0.3rem 0.7rem;
+            border: none;
+            background-color: #eee;
+            color: #333;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .lang-switcher button.active {
+            background-color: #111;
+            color: #fff;
+        }
+
+        .burger-menu {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1000;
+        }
+
+        #burgerBtn {
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 0.6rem;
+            margin-top: 0.5rem;
+            border-radius: 7px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #333;
+            padding: 0.5rem 0;
+        }
+
+        .menu.hidden {
+            display: none;
+        }
+
+
+        header,
+        section,
+        footer {
+            padding: 4rem 2rem;
+            text-align: center;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .project-block {
+            border: 1px solid #eee;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            background: #fafafa;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .project-block:hover {
+            background: #f0f0f0;
+        }
+
+        .project-block h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+        }
+
+        .project-type {
+            font-style: italic;
+            color: #777;
+            margin-bottom: 1rem;
+        }
+
+        .project-tags {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .project-tags li {
+            background: #ddd;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #333;
+        }
+
+        .project-block a {
+            display: inline-block;
+            margin-top: 1rem;
+            text-decoration: none;
+            color: #0066cc;
+            font-weight: bold;
+        }
+
+        .contact-info {
+            margin-top: 2rem;
+        }
+
+        .contact-info p {
+            margin: 0.5rem 0;
+        }
+
+        footer {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        /* ลูกศรเลื่อนลง */
+        .arrow-wrapper {
+            position: fixed;
+            transform: translateX(-50%);
+            bottom: 35px;
+            left: 50%;
+            padding: 15px;
+            border: 1px solid #282828;
+            border-radius: 25px;
+            background-color: rgba(215, 215, 215, 0.1);
+            backdrop-filter: blur(2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .scroll-down-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .scroll-down-arrow span {
+            display: block;
+            width: 8px;
+            height: 8px;
+            border-bottom: 2px solid #282828;
+            border-right: 2px solid #282828;
+            transform: rotate(45deg);
+            animation: arrowBounce 1.5s infinite;
+            opacity: 0.8;
+        }
+
+        .hidden {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .scroll-down-arrow span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .scroll-down-arrow span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes arrowBounce {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(45deg);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: translateY(8px) rotate(45deg);
+                opacity: 0.4;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="burger-menu">
+        <button id="burgerBtn">&#9776;</button>
+        <div id="menu" class="menu hidden">
+            <a href="#web"> ผลงานด้านเว็บไซต์และแอปพลิเคชั่น </a>
+            <a href="#video">ผลงานด้านโปรดักชัน</a>
+            <a href="#graphic">ผลงานออกแบบกราฟิก</a>
+            <a href="#activities">กิจกรรม</a>
+            <a href="#contact">ช่องทางการติดต่อ</a>
+        </div>
+    </div>
+    <div class="lang-switcher">
+        <a href="index.html"><button class="lang-btn" data-lang="en">EN</button></a>
+        <a href="th.html"><button class="lang-btn active" data-lang="th">TH</button></a>
+    </div>
+    <header>
+        <h1 data-aos="fade-down" data-langkey="heroTitle">แฟ้มสะสมผลงานของ " ณัฏฐนิช "</h1>
+        <p data-aos="fade-up" data-aos-delay="200" data-langkey="heroSubtitle">นักพัฒนาเว็บไซต์ฝั่งผู้ใช้ และนักออกแบบ
+            UX/UI</p>
+    </header>
+    <div class="arrow-wrapper">
+        <div class="scroll-down-arrow">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <section id="web">
+        <h2 data-langkey="sectionWeb">ผลงานด้านเว็บไซต์และแอปพลิเคชั่น</h2>
+        <div class="project-block" data-aos="fade-up">
+            <h3>เว็บไซต์ " ระบาย "</h3>
+            <p class="project-type">พัฒนาเว็บไซต์ส่วนหน้า/ออกแบบหน้าตาเว็บไซต์</p>
+            <p>เว็บไซต์นี้นำเสนอความรู้เกี่ยวกับศิลปะบำบัด พร้อมมีการจำลองกิจกรรมศิลปะบำบัดต่าง ๆ อย่างการวาดภาพระบายสี
+                ปาสี จัดดอกไม้และระบายความรู้สึก
+                ให้ผู้ใช้งานได้ทดลองทำในรูปแบบออนไลน์
+            </p>
+            <ul class="project-tags">
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+                <li>Responsive</li>
+                <li>Figma</li>
+            </ul>
+            <img src="img/RB.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://kmutt.me/RABYE-ART" target="_blank" rel="noopener noreferrer">ชมเว็บไซต์</a><br>
+            <a href="https://youtu.be/2dKxAZCvkIM" target="_blank" rel="noopener noreferrer">วิดีโอผลงาน</a><br>
+            <a href="https://www.figma.com/proto/1JNO71184mPLefDH5ncul3/UI-Thesis?node-id=120-579&p=f&t=BkgkzDzNyHmxasIA-0&scaling=scale-down&content-scaling=fixed&page-id=7%3A2&starting-point-node-id=99%3A285"
+                target="_blank" rel="noopener noreferrer"> ดูต้นแบบอินเทอร์เฟซ </a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>เว็บไซต์ " เมนูวันนี้ "</h3>
+            <p class="project-type">พัฒนาเว็บไซต์/ออกแบบหน้าตาเว็บไซต์</p>
+            <p>เว็บไซต์นี้รวบรวมเมนูอาหารและวิธีทำจากหลากหลายประเภท เช่น อาหารญี่ปุ่น ไทย จีน
+                ที่ตอบโจทย์ความต้องการของผู้ที่ชื่นชอบการทำอาหาร
+                นอกจากนี้ยังมีฟังก์ชันพิเศษที่ช่วยให้ผู้ใช้สามารถเลือกประเภทอาหารที่ต้องการ
+                และสุ่มเมนูออกมาให้ในกรณีที่ไม่แน่ใจว่าจะทานอะไร เหมาะสำหรับแก้ปัญหาที่หลายคนมักเจอในชีวิตประจำวัน
+                คือ “นึกไม่ออกว่าจะกินอะไรดี”
+            </p>
+            <ul class="project-tags">
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+                <li>Node.js</li>
+                <li>SQL</li>
+                <li>Figma</li>
+            </ul>
+            <img src="img/M.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://www.figma.com/proto/p50B0M6zEHgeIqkeCsCDEU/Foods?node-id=41-1386&p=f&t=xHJ2w631nfP42ZaC-1&scaling=scale-down&content-scaling=fixed&page-id=15%3A631&starting-point-node-id=41%3A1386"
+                target="_blank" rel="noopener noreferrer"> ดูต้นแบบอินเทอร์เฟซ </a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>เว็บไซต์ " วิบวับ " </h3>
+            <p class="project-type">พัฒนาเว็บไซต์ส่วนหน้า/ออกแบบหน้าตาเว็บไซต์</p>
+            <p>พัฒนาเว็บไซต์อีคอมเมิร์ซสำหรับจำหน่ายเครื่องประดับแฟชั่น เครื่องประดับจิวเวลรี่ ประเภทสร้อย แหวนและต่างหู
+            </p>
+            <ul class="project-tags">
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+                <li>ASP.NET</li>
+                <li>bootstrap</li>
+                <li>Figma</li>
+            </ul>
+            <img src="img/W.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;"><br>
+            <a href="https://youtu.be/eWJ-htvS1Z4" target="_blank" rel="noopener noreferrer">วิดีโอผลงาน</a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>แอปพลิเคชั่น " วอททูโก "</h3>
+            <p class="project-type">ออกแบบหน้าตาเว็บไซต์</p>
+            <p>ออกแบบแอปพลิเคชันสำหรับร้านซักผ้าหยอดเหรียญ ครอบคลุมทั้งระบบสำหรับผู้ดูแลร้านและอินเทอร์เฟซสำหรับลูกค้า
+            </p>
+            <ul class="project-tags">
+                <li>Figma</li>
+            </ul>
+            <img src="img/Mis.png" alt="Portfolio Preview"
+                style="width:100%; border-radius:8px; margin-bottom:1rem;"><br>
+            <a href="https://www.figma.com/proto/tisDN8LhWhsG4RYAqvvSwp/MIS?node-id=2475-757&starting-point-node-id=2313%3A2&t=tJFXt7a91lAJJMyA-1"
+                target="_blank" rel="noopener noreferrer"> ดูต้นแบบอินเทอร์เฟซ </a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>แอปพลิเคชั่น " ก๊าบก๊าบ "</h3>
+            <p class="project-type"> ออกแบบหน้าตาเว็บไซต์</p>
+            <p>ออกแบบแอปพลิเคชันสำหรับยืมสิ่งของ
+                แอปนี้ถูกออกแบบขึ้นเพื่อใช้ในการยืมสิ่งของภายในสาขาวิชาคอมพิวเตอร์ประยุกต์-มัลติมีเดีย
+                (CMM)
+                มหาวิทยาลัยพระจอมเกล้าธนบุรีโดยมีสีหลักเป็นสีเขียวมิ้นท์ซึ่งเป็นสีประจำสาขาและมีรูปเป็ดเป็นตัวแทนสัญลักษณ์นักศึกษา
+                CMM
+            </p>
+            <ul class="project-tags">
+                <li>Figma</li>
+            </ul>
+            <img src="img/D.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;"><br>
+            <a href="https://www.figma.com/proto/5PWPIfJHQSIUamZO7PTlr0/Final_CMM223---G.3--?node-id=9-3&starting-point-node-id=9%3A3&t=FtH7MKe0k3emz0T0-1"
+                target="_blank" rel="noopener noreferrer"> ดูต้นแบบอินเทอร์เฟซ </a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>แอปพลิเคชั่น " โรบินฮู้ด "</h3>
+            <p class="project-type"> ออกแบบหน้าตาเว็บไซต์</p>
+            <p>ศึกษาการใช้งานแอปพลิเคชั่นเดริเวอรี่ โรบินฮู้ด พร้อมวิเคราะห์เพื่อออกแบบและปรับปรุงส่วนติดต่อผู้ใช้ (UI)
+                ให้มีประสิทธิภาพและประสบการณ์การใช้งานที่ดีขึ้น</p>
+            <ul class="project-tags">
+                <li>Figma</li>
+            </ul>
+            <img src="img/Rd.png" alt="Portfolio Preview"
+                style="width:100%; border-radius:8px; margin-bottom:1rem;"><br>
+            <a href="https://www.figma.com/proto/Aw0ygBIOiT3ydCHytHutlx/robinhood?node-id=1-2&t=Aj3Qen3zGtqhkCWu-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=41%3A97&show-proto-sidebar=1"
+                target="_blank" rel="noopener noreferrer"> ดูต้นแบบอินเทอร์เฟซ </a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>แคทวอคด็อกจัมฟ์</h3>
+            <p class="project-type"> ออกแบบเกม</p>
+            <p>เกมนี้ได้รับแรงบันดาลใจมาจากเกม Pico Park ผู้เล่นจะสวมบทบาทเป็นสุนัขหรือแมว
+                โดยเล่นร่วมกับเพื่อนเป็นกลุ่ม 3 คนผู้เล่นแต่ละทีมต้องร่วมมือกันเพื่อฝ่าฟันอุปสรรคต่าง ๆ
+                และไปให้ถึงเส้นชัยก่อนอีกทีม ตัวเกมมีทั้งหมด 3 ด่าน หากทีมใดสามารถชนะได้ 2 ใน 3 ด่าน
+                จะถือว่าเป็นผู้ชนะ </p>
+            <ul class="project-tags">
+                <li>Procreate</li>
+                <li>Illustrator</li>
+            </ul>
+            <img src="img/G.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;"><br>
+            <a href="https://youtu.be/eALSZZCrzg0" target="_blank" rel="noopener noreferrer">วิดีโอผลงาน</a>
+        </div>
+    </section>
+
+    <section id="video">
+        <h2 data-langkey="sectionVideo">ผลงานด้านโปรดักชัน</h2>
+        <div class="project-block" data-aos="fade-up">
+            <h3>วิดีโอแนะนำการใช้งาน Roland V-1HD+ ร่วมกับ OBS Studio</h3>
+            <p class="project-type"> </p>
+            <p>วิดีโอนี้เป็นการแนะนำฟีเจอร์พื้นฐานของอุปกรณ์ Roland V-1HD+ และโปรแกรม OBS Studio
+                สำหรับนักศึกษามหาวิทยาลัยเทคโนโลยีหมิงฉี ประเทศไต้หวัน</p>
+            <ul class="project-tags">
+                <li>Davinci</li>
+                <li>Ai voice</li>
+            </ul>
+            <img src="img/obs.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://www.youtube.com/watch?v=Wsai9hQ1sdI" target="_blank"
+                rel="noopener noreferrer">วิดีโอผลงาน</a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>วิดีโอแนะนำการใช้งาน RØDE Caster Pro ร่วมกับ GarageBand</h3>
+            <p class="project-type"> </p>
+            <p>วิดีโอนี้เป็นการแนะนำฟีเจอร์พื้นฐานของอุปกรณ์ RØDECaster Pro และโปรแกรม GarageBand
+                สำหรับนักศึกษามหาวิทยาลัยเทคโนโลยีหมิงฉี ประเทศไต้หวัน</p>
+            <ul class="project-tags">
+                <li>Davinci</li>
+                <li>Ai voice</li>
+            </ul>
+            <img src="img/Gb.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://www.youtube.com/watch?v=fTg_MDFwggo" target="_blank"
+                rel="noopener noreferrer">วิดีโอผลงาน</a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>วิดิโอแนะนำภาควิชาออกแบบการตลาดดิจิทัล </h3>
+            <p class="project-type"> </p>
+            <p>จัดทำวิดีโอแนะนำภาควิชาออกแบบการตลาดดิจิทัล มหาวิทยาลัยเทคโนโลยีหมิงฉี ประเทศไต้หวัน</p>
+            <ul class="project-tags">
+                <li>CapCut Pro</li>
+            </ul>
+            <img src="img/DMD.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://youtu.be/wePLO2A37ME" target="_blank" rel="noopener noreferrer">วิดีโอผลงาน</a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>รายการวาไรตี้ - ระเบิดเวลาทายคำ </h3>
+            <p class="project-type"> </p>
+            <p>ทีมงานถ่ายทำรายการวาไรตี้โดยรับผิดชอบงานในการถ่ายทำ การจัดแสง การเตรียมอุปกรณ์ประกอบฉากและทีมงานถ่ายทำ
+            </p>
+            <ul class="project-tags">
+                <li>Premiere Pro</li>
+            </ul>
+            <img src="img/time.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://youtu.be/4gOUqmNhc0g" target="_blank" rel="noopener noreferrer">วิดีโอผลงาน</a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>พระแม่ลักษมี : ความเชื่อและความหวัง </h3>
+            <p class="project-type"> </p>
+            <p>ถ่ายทำสารคดี ศรัทธาและความหวังของผู้คนที่นับถือพระแม่ลักษมี เทพีแห่งความมั่งคั่ง ความรัก
+                และความเมตตา โดยเล่าเรื่องผ่านพิธีกรรมและความเชื่อในวิถีชีวิตประจำวันของคนไทย
+            </p>
+            <ul class="project-tags">
+                <li>Premiere Pro</li>
+            </ul>
+            <img src="img/L.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://youtu.be/sPL0RWQTBhY" target="_blank" rel="noopener noreferrer">วิดีโอผลงาน</a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>โปรเจกต์ในชั้นเรียน – วิดีโอโปรโมตสินค้า </h3>
+            <p class="project-type"> </p>
+            <p>สร้างวิดีโอโฆษณาเบอดี้ลาเต้ความยาว 30 วินาที ตั้งแต่ต้นจนจบ
+                โดยรับผิดชอบการเตรียมเครื่องแต่งกายและอุปกรณ์ประกอบฉาก
+                สำรวจสถานที่ คัดเลือกนักแสดง บันทึกเสียงพากย์ และทีมงานถ่ายทำ</p>
+            <ul class="project-tags">
+                <li>After Effects</li>
+                <li>Premiere Pro</li>
+            </ul>
+            <img src="img/cf.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://youtu.be/PJpIAI_glLo" target="_blank" rel="noopener noreferrer">วิดีโอผลงาน</a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>CAI ปันความรู้ ครั้งที่ 10</h3>
+            <p class="project-type"> </p>
+            <p>สร้างโมชั่นกราฟิกเพื่อให้ความรู้เกี่ยวกับวิตามินและแร่ธาตุ
+                โดยได้รับหน้าที่ในส่วนของการอธิบายความหมายและประเภท
+                พร้อมทั้งจัดทำเกมบิงโก เพื่อถ่ายทอดความรู้แก่นักเรียนระดับประถมศึกษา ณ โรงเรียนชุมชนบ้านบ่อ อำเภอสวนผึ้ง
+                จังหวัดราชบุรี
+            </p>
+            <ul class="project-tags">
+                <li>After Effects</li>
+                <li>Illustrator</li>
+                <li>Canva</li>
+            </ul>
+            <img src="img/Cai.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://sway.cloud.microsoft/FgzPwbyvA0Sacutf?fbclid=IwY2xjawGoLyxleHRuA2FlbQIxMAABHWS3-3dam5SFxJMxIMueUMiPEj06iNronhbhNOzWff-4ZJLOozphwPNVAw_aem_rpz_ZNnZrkl5J-N4lYe0NQ"
+                target="_blank" rel="noopener noreferrer"> ชมเว็บไซต์ </a>
+        </div>
+    </section>
+
+    <section id="graphic">
+        <h2 data-langkey="sectionGraphic">ผลงานออกแบบกราฟิก</h2>
+        <div class="project-block" data-aos="fade-up">
+            <h3>วิบวับ</h3>
+            <p class="project-type">ออกแบบโลโก้</p>
+            <p>โลโก้เว็บไซต์ที่ออกแบบในสไตล์มินิมอลและหรูหราเล็กน้อย
+                โดยเน้นการออกแบบตัวอักษรด้วยการผสมผสานตัวพิมพ์เล็กและรูปดาว
+                เพื่อเพิ่มเสน่ห์และสื่อถึงความแวววาวของเครื่องประดับ ซึ่งสอดคล้องกับชื่อเว็บไซต์ ‘Wib-Wab’
+                ซึ่งเป็นคำภาษาไทยที่มีความหมายว่าเปล่งประกายแวววาวนำมาสื่อถึงเครื่องประดับ</p>
+            <ul class="project-tags">
+                <li>Canva</li>
+            </ul>
+            <div style="text-align: center;">
+                <img src="img/W3.png" alt="Portfolio Preview" style="width:70%; border-radius:8px; margin-bottom:1rem;">
+            </div>
+
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>แคทวอคด็อกจัมฟ์</h3>
+            <p class="project-type">ออกแบบโลโก้</p>
+            <p>โลโก้นี้ถูกออกแบบในสไตล์เรียบง่ายให้เข้าถึงและเข้าใจได้ง่ายสำหรับทุกคน โดยใช้สำหรับเกมที่มีชื่อว่า
+                ‘Cat Walks Dog Jump’</p>
+            <ul class="project-tags">
+                <li>Procreate</li>
+            </ul>
+            <div style="text-align: center;">
+                <img src="img/CD.png" alt="Portfolio Preview"
+                    style="width:70%; border-radius:8px; margin-bottom:1rem; background-color: white;">
+            </div>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>เพ-ลา</h3>
+            <p class="project-type">ออกแบบโลโก้</p>
+            <p>โลโก้สำหรับโคเวิร์กกิ้งสเปซชื่อว่า ‘PHA-LA’ ซึ่งมีที่มาจากคำว่า ‘เวลา’ ในภาษาไทยโบราณ
+                โดยโลโก้ถูกออกแบบให้มีลักษณะคล้ายรูปนาฬิกา เพื่อสื่อถึงการเป็นพื้นที่ที่ผู้คนใช้เวลาในการทำกิจกรรมต่าง ๆ
+                ภายในร้าน</p>
+            <ul class="project-tags">
+                <li>Canva</li>
+            </ul>
+            <div style="text-align: center;">
+                <img src="img/pl.png" alt="Portfolio Preview"
+                    style="width:70%; border-radius:8px; margin-bottom:1rem; background-color: white;">
+            </div>
+        </div>
+    </section>
+
+    <section id="activities">
+        <h2 data-langkey="sectionActivities">กิจกรรม</h2>
+        <div class="project-block" data-aos="fade-up">
+            <h3>สโมสรนักศึกษา</h3>
+            <p class="project-type">Social</p>
+            <p>ดำรงตำแหน่งสโมสรนักศึกษาประจำปีกาวศึกษา 2566 คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี
+                มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าธนบุรี</p>
+            <ul class="project-tags">
+                <li>จิตอาสา</li>
+                <li>การศึกษา</li>
+            </ul>
+            <div style="text-align: center;">
+                <img src="img/Smo.png" alt="Portfolio Preview"
+                    style="width:100%; border-radius:8px; margin-bottom:1rem; background-color: white;">
+            </div>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>CAI ปันความรู้ ครั้งที่ 10</h3>
+            <p class="project-type">Social</p>
+            <p> สตาฟดูแลฐานกิจกรรมให้แก่น้องๆโรงเรียนชุมชนบ้านบ่อ อำเภอสวนผึ้ง จังหวัดราชบุรี </p>
+            <ul class="project-tags">
+                <li>จิตอาสา</li>
+                <li>การศึกษา</li>
+            </ul>
+            <div style="text-align: center;">
+                <img src="img/cai10.png" alt="Portfolio Preview"
+                    style="width:100%; border-radius:8px; margin-bottom:1rem; background-color: white;">
+            </div>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3> พิธีกร </h3>
+            <p class="project-type">Social</p>
+            <p>พิธีกรดำเนินการทำกิจกรรมบนเวทีในงาน Open House FIET LAND KMUTT ดินแดนแห่งการเรียนรู้</p>
+            <ul class="project-tags">
+                <li>จิตอาสา</li>
+                <li>การศึกษา</li>
+            </ul>
+            <div style="text-align: center;">
+                <img src="img/MC.png" alt="Portfolio Preview"
+                    style="width:100%; border-radius:8px; margin-bottom:1rem; background-color: white;">
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 data-langkey="sectionContact">ช่องทางการติดต่อ</h2>
+        <div class="contact-info" data-aos="fade-up">
+            <p>✉️ อีเมลติดต่อ : nuttanit.nn@gmail.com</p>
+            <p>📞 โทรศัพท์ : 096-604-1448 </p>
+        </div>
+    </section>
+
+    <footer data-langkey="footerText">
+        © 2025 Nuttanit. All rights reserved.
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        const burgerBtn = document.getElementById('burgerBtn');
+        const menu = document.getElementById('menu');
+
+        burgerBtn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // ปิดเมนูอัตโนมัติเมื่อคลิกเมนู
+        document.querySelectorAll('#menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // ลูกศรแสดงเลื่อนลง
+        const arrow = document.querySelector('.arrow-wrapper');
+        const web = document.getElementById('web');
+
+        window.addEventListener('scroll', () => {
+            const sectionRect = web.getBoundingClientRect();
+
+            if (sectionRect.bottom <= 0 || sectionRect.top >= window.innerHeight) {
+                arrow.classList.add('hidden'); // ซ่อนลูกศร
+            } else {
+                arrow.classList.remove('hidden'); // แสดงลูกศร
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio</title>
+    <link rel="icon" href="img/N.png" type="image/png">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <style>
+        @font-face {
+            font-family: 'Prompt-Medium';
+            src: url('asset/Prompt-Medium.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'IPrompt-Medium', sans-serif;
+            background-color: #fff;
+            color: #111;
+            margin: 0;
+            padding: 0;
+        }
+
+        .lang-switcher {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            /* left: 1rem; */
+            z-index: 999;
+        }
+
+        .lang-switcher button {
+            margin-right: 0.5rem;
+            padding: 0.3rem 0.7rem;
+            border: none;
+            background-color: #eee;
+            color: #333;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .lang-switcher button.active {
+            background-color: #111;
+            color: #fff;
+        }
+
+        .burger-menu {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1000;
+        }
+
+        #burgerBtn {
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 0.6rem;
+            margin-top: 0.5rem;
+            border-radius: 7px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #333;
+            padding: 0.5rem 0;
+        }
+
+        .menu.hidden {
+            display: none;
+        }
+
+
+        header,
+        section,
+        footer {
+            padding: 4rem 2rem;
+            text-align: center;
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .project-block {
+            border: 1px solid #eee;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            background: #fafafa;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .project-block:hover {
+            background: #f0f0f0;
+        }
+
+        .project-block h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+        }
+
+        .project-type {
+            font-style: italic;
+            color: #777;
+            margin-bottom: 1rem;
+        }
+
+        .project-tags {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .project-tags li {
+            background: #ddd;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #333;
+        }
+
+        .project-block a {
+            display: inline-block;
+            margin-top: 1rem;
+            text-decoration: none;
+            color: #0066cc;
+            font-weight: bold;
+        }
+
+        .contact-info {
+            margin-top: 2rem;
+        }
+
+        .contact-info p {
+            margin: 0.5rem 0;
+        }
+
+        footer {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        /* ลูกศรเลื่อนลง */
+        .arrow-wrapper {
+            position: fixed;
+            transform: translateX(-50%);
+            bottom: 35px;
+            left: 50%;
+            padding: 15px;
+            border: 1px solid #282828;
+            border-radius: 25px;
+            background-color: rgba(215, 215, 215, 0.1);
+            backdrop-filter: blur(2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .scroll-down-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .scroll-down-arrow span {
+            display: block;
+            width: 8px;
+            height: 8px;
+            border-bottom: 2px solid #282828;
+            border-right: 2px solid #282828;
+            transform: rotate(45deg);
+            animation: arrowBounce 1.5s infinite;
+            opacity: 0.8;
+        }
+
+        .hidden {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .scroll-down-arrow span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .scroll-down-arrow span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes arrowBounce {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(45deg);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: translateY(8px) rotate(45deg);
+                opacity: 0.4;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="burger-menu">
+        <button id="burgerBtn">&#9776;</button>
+        <div id="menu" class="menu hidden">
+            <a href="#web"> Websites and Mobile app </a>
+            <a href="#video">Production</a>
+            <a href="#graphic">Graphic Design</a>
+            <a href="#activities">Activities</a>
+            <a href="#contact">contact</a>
+        </div>
+    </div>
+    <div class="lang-switcher">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <a href="th.html"><button class="lang-btn" data-lang="th">TH</button></a>
+    </div>
+
+    <header>
+        <h1 data-aos="fade-down" data-langkey="heroTitle">Nuttanit’s Portfolio</h1>
+        <p data-aos="fade-up" data-aos-delay="200" data-langkey="heroSubtitle">Frontend Developer & UX/UI Designer</p>
+    </header>
+
+    <div class="arrow-wrapper">
+        <div class="scroll-down-arrow">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <section id="web">
+        <h2 data-langkey="sectionWeb">Websites and Mobile app</h2>
+        <div class="project-block" data-aos="fade-up">
+            <h3>Rabye Website</h3>
+            <p class="project-type">Frontend / UI Design</p>
+            <p>Developed a user-friendly website about art therapy, featuring simple activities for users to try online.
+            </p>
+            <ul class="project-tags">
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+                <li>Responsive</li>
+                <li>Figma</li>
+            </ul>
+            <img src="img/RB.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://kmutt.me/RABYE-ART" target="_blank" rel="noopener noreferrer">View Site</a><br>
+            <a href="https://youtu.be/2dKxAZCvkIM" target="_blank" rel="noopener noreferrer">Showreel</a><br>
+            <a href="https://www.figma.com/proto/1JNO71184mPLefDH5ncul3/UI-Thesis?node-id=120-579&p=f&t=BkgkzDzNyHmxasIA-0&scaling=scale-down&content-scaling=fixed&page-id=7%3A2&starting-point-node-id=99%3A285"
+                target="_blank" rel="noopener noreferrer"> View prototype </a>
+
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>Today's menu Website</h3>
+            <p class="project-type">Full Stack / UI Design</p>
+            <p>Developed a user-friendly website about foods, designed this website to collect food menus and have a
+                function to randomly select a menu.
+            </p>
+            <ul class="project-tags">
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+                <li>Node.js</li>
+                <li>SQL</li>
+                <li>Figma</li>
+            </ul>
+            <img src="img/M.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://www.figma.com/proto/p50B0M6zEHgeIqkeCsCDEU/Foods?node-id=41-1386&p=f&t=xHJ2w631nfP42ZaC-1&scaling=scale-down&content-scaling=fixed&page-id=15%3A631&starting-point-node-id=41%3A1386"
+                target="_blank" rel="noopener noreferrer"> View prototype </a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>Wib Wab accessories </h3>
+            <p class="project-type">Frontend / UI Design</p>
+            <p>Developed an e-commerce website for selling fashion accessories and jewelry.</p>
+            <ul class="project-tags">
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+                <li>ASP.NET</li>
+                <li>bootstrap</li>
+                <li>Figma</li>
+            </ul>
+            <img src="img/W.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;"><br>
+            <a href="https://youtu.be/eWJ-htvS1Z4" target="_blank" rel="noopener noreferrer">Showreel</a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>Wash2Go</h3>
+            <p class="project-type"> UI Design</p>
+            <p>Designed an application for a laundry shop, including both the operator system and the customer
+                interface.</p>
+            <ul class="project-tags">
+                <li>Figma</li>
+            </ul>
+            <img src="img/Mis.png" alt="Portfolio Preview"
+                style="width:100%; border-radius:8px; margin-bottom:1rem;"><br>
+            <a href="https://www.figma.com/proto/tisDN8LhWhsG4RYAqvvSwp/MIS?node-id=2475-757&starting-point-node-id=2313%3A2&t=tJFXt7a91lAJJMyA-1"
+                target="_blank" rel="noopener noreferrer"> View prototype </a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>GAAB GAAB</h3>
+            <p class="project-type"> UI Design</p>
+            <p>Application for borrowing items.The design of this app is an app for borrowing items within the cmm
+                department of kmutt. The main color is mint green, which is the color of the department and the duck
+                represents cmm students.</p>
+            <ul class="project-tags">
+                <li>Figma</li>
+            </ul>
+            <img src="img/D.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;"><br>
+            <a href="https://www.figma.com/proto/5PWPIfJHQSIUamZO7PTlr0/Final_CMM223---G.3--?node-id=9-3&starting-point-node-id=9%3A3&t=FtH7MKe0k3emz0T0-1"
+                target="_blank" rel="noopener noreferrer"> View prototype </a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>Robinhood</h3>
+            <p class="project-type"> UI Design</p>
+            <p>Studied the Robinhood delivery app and analyzed it to redesign and improve the UI.</p>
+            <ul class="project-tags">
+                <li>Figma</li>
+            </ul>
+            <img src="img/Rd.png" alt="Portfolio Preview"
+                style="width:100%; border-radius:8px; margin-bottom:1rem;"><br>
+            <a href="https://www.figma.com/proto/Aw0ygBIOiT3ydCHytHutlx/robinhood?node-id=1-2&t=Aj3Qen3zGtqhkCWu-1&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=41%3A97&show-proto-sidebar=1"
+                target="_blank" rel="noopener noreferrer"> View prototype </a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>CAT WALK DOG JUMP</h3>
+            <p class="project-type"> GAME Design</p>
+            <p>This game have inspired by the game Pico Park.players play as a dog or cat, playing in groups with
+                friends. They must work together to overcome obstacles to reach the finish line before the other team.
+                There are three levels in total. If you win 2 out of 3, you win the game. </p>
+            <ul class="project-tags">
+                <li>Procreate</li>
+                <li>Illustrator</li>
+            </ul>
+            <img src="img/G.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;"><br>
+            <a href="https://youtu.be/eALSZZCrzg0" target="_blank" rel="noopener noreferrer">Video Trailer</a>
+        </div>
+    </section>
+
+    <section id="video">
+        <h2 data-langkey="sectionVideo">Production</h2>
+        <div class="project-block" data-aos="fade-up">
+            <h3>Tutorial Video - Roland V-1HD+ and OBS studio</h3>
+            <p class="project-type"> </p>
+            <p>This video provides an introduction to the basic features of the Roland V-1HD+ and OBS Studio for
+                students at Ming Chi University of Technology, Taiwan.</p>
+            <ul class="project-tags">
+                <li>Davinci</li>
+                <li>Ai voice</li>
+            </ul>
+            <img src="img/obs.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://www.youtube.com/watch?v=Wsai9hQ1sdI" target="_blank" rel="noopener noreferrer">Watch
+                Video</a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>Tutorial Video - RØDE Caster Pro and GarageBand</h3>
+            <p class="project-type"> </p>
+            <p>This video provides basic information about the RØDECaster Pro and GarageBand for students at Ming Chi
+                University of Technology in Taiwan.</p>
+            <ul class="project-tags">
+                <li>Davinci</li>
+                <li>Ai voice</li>
+            </ul>
+            <img src="img/Gb.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://www.youtube.com/watch?v=fTg_MDFwggo" target="_blank" rel="noopener noreferrer">Watch
+                Video</a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>Welcome to Digital Marketing Design, MCUT </h3>
+            <p class="project-type"> </p>
+            <p>Produced an introduction video for the Digital Marketing Design department at Ming Chi University of
+                Technology in Taiwan.</p>
+            <ul class="project-tags">
+                <li>CapCut Pro</li>
+            </ul>
+            <img src="img/DMD.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://youtu.be/wePLO2A37ME" target="_blank" rel="noopener noreferrer">Watch Video</a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>TV Show - Time Bomb </h3>
+            <p class="project-type"> </p>
+            <p>Responsible for filming, lighting setup, and prop preparation as part of the production crew.</p>
+            <ul class="project-tags">
+                <li>Premiere Pro</li>
+            </ul>
+            <img src="img/time.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://youtu.be/4gOUqmNhc0g" target="_blank" rel="noopener noreferrer">Watch Video</a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>Goddess Lakshmi: Faith in Hope </h3>
+            <p class="project-type"> </p>
+            <p>Filmed a documentary exploring the faith and hope of people who worship Goddess Lakshmi—deity of wealth,
+                love, and compassion. The story is told through rituals and beliefs embedded in Thai daily life,
+                reflecting both spiritual and modern societal perspectives.
+            </p>
+            <ul class="project-tags">
+                <li>Premiere Pro</li>
+            </ul>
+            <img src="img/L.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://youtu.be/sPL0RWQTBhY" target="_blank" rel="noopener noreferrer">Watch Video</a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>Class Project - Product Promo Video</h3>
+            <p class="project-type"> </p>
+            <p>Created a 30-second promo video from start to finish—handled costume and prop preparation, location
+                scouting, casting, voiceover recording, and shoot coordination.</p>
+            <ul class="project-tags">
+                <li>After Effects</li>
+                <li>Premiere Pro</li>
+            </ul>
+            <img src="img/cf.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://youtu.be/PJpIAI_glLo" target="_blank" rel="noopener noreferrer">Watch Video</a>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>CAI Sharing knowledge ,10th</h3>
+            <p class="project-type"> </p>
+            <p>Create motion graphics to provide knowledge about vitamins and minerals in part of telling the meaning
+                and types and make a bingo game. To provide knowledge to primary school students in Ratchaburi, Thailand
+            </p>
+            <ul class="project-tags">
+                <li>After Effects</li>
+                <li>Illustrator</li>
+                <li>Canva</li>
+            </ul>
+            <img src="img/Cai.png" alt="Portfolio Preview" style="width:100%; border-radius:8px; margin-bottom:1rem;">
+            <a href="https://sway.cloud.microsoft/FgzPwbyvA0Sacutf?fbclid=IwY2xjawGoLyxleHRuA2FlbQIxMAABHWS3-3dam5SFxJMxIMueUMiPEj06iNronhbhNOzWff-4ZJLOozphwPNVAw_aem_rpz_ZNnZrkl5J-N4lYe0NQ"
+                target="_blank" rel="noopener noreferrer"> View Site </a>
+        </div>
+    </section>
+
+    <section id="graphic">
+        <h2 data-langkey="sectionGraphic">Graphic Design</h2>
+        <div class="project-block" data-aos="fade-up">
+            <h3>WIB WAB</h3>
+            <p class="project-type">Design</p>
+            <p>It is a website logo designed to be minimal and slightly luxurious. It emphasizes the design of the
+                letters by mixing small letters and stars to add charm and convey the sparkle of the jewelry, which is
+                consistent with the name of the website called Wib-Wab, which is a Thai word that means sparkling
+                jewelry.</p>
+            <ul class="project-tags">
+                <li>Canva</li>
+            </ul>
+            <div style="text-align: center;">
+                <img src="img/W3.png" alt="Portfolio Preview" style="width:70%; border-radius:8px; margin-bottom:1rem;">
+            </div>
+
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>CAT WALK DOG JUMP</h3>
+            <p class="project-type">Design</p>
+            <p>It is a logo with a simple design that everyone can easily understand. It for a game called Cat Walks Dog
+                Jump.</p>
+            <ul class="project-tags">
+                <li>Procreate</li>
+            </ul>
+            <div style="text-align: center;">
+                <img src="img/CD.png" alt="Portfolio Preview"
+                    style="width:70%; border-radius:8px; margin-bottom:1rem; background-color: white;">
+            </div>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>PHA-LA</h3>
+            <p class="project-type">Design</p>
+            <p>Design a logo for a coworking space called PHA-LA, which comes from the word “time” in ancient Thai. The
+                logo is designed to look like a clock because a coworking space is a place where people spend time doing
+                activities in the store.</p>
+            <ul class="project-tags">
+                <li>Canva</li>
+            </ul>
+            <div style="text-align: center;">
+                <img src="img/pl.png" alt="Portfolio Preview"
+                    style="width:70%; border-radius:8px; margin-bottom:1rem; background-color: white;">
+            </div>
+        </div>
+    </section>
+
+    <section id="activities">
+        <h2 data-langkey="sectionActivities">Activities</h2>
+        <div class="project-block" data-aos="fade-up">
+            <h3>Student Union</h3>
+            <p class="project-type">Social</p>
+            <p>Academic Year 2023 Faculty of FIET KMUTT University.</p>
+            <ul class="project-tags">
+                <li>Volunteering</li>
+                <li>Education</li>
+            </ul>
+            <div style="text-align: center;">
+                <img src="img/Smo.png" alt="Portfolio Preview"
+                    style="width:100%; border-radius:8px; margin-bottom:1rem; background-color: white;">
+            </div>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3>CAI Sharing knowledge ,10th</h3>
+            <p class="project-type">Social</p>
+            <p>Served as a staff member overseeing activity stations for students from Ban Bo Community School, Suan
+                Phueng District, Ratchaburi Province.</p>
+            <ul class="project-tags">
+                <li>Volunteering</li>
+                <li>Education</li>
+            </ul>
+            <div style="text-align: center;">
+                <img src="img/cai10.png" alt="Portfolio Preview"
+                    style="width:100%; border-radius:8px; margin-bottom:1rem; background-color: white;">
+            </div>
+        </div>
+
+        <div class="project-block" data-aos="fade-up">
+            <h3> MC Master of ceremonies </h3>
+            <p class="project-type">Social</p>
+            <p>The leads the activities on stage at the open house FIET LAND KMUTT, the land of learning.</p>
+            <ul class="project-tags">
+                <li>Volunteering</li>
+                <li>Education</li>
+            </ul>
+            <div style="text-align: center;">
+                <img src="img/MC.png" alt="Portfolio Preview"
+                    style="width:100%; border-radius:8px; margin-bottom:1rem; background-color: white;">
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 data-langkey="sectionContact">Contact</h2>
+        <div class="contact-info" data-aos="fade-up">
+            <p>✉️ Email : nuttanit.nn@gmail.com</p>
+            <p>📞 Tel : 096-604-1448 </p>
+        </div>
+    </section>
+
+    <footer data-langkey="footerText">
+        © 2025 Nuttanit. All rights reserved.
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+
+        const burgerBtn = document.getElementById('burgerBtn');
+        const menu = document.getElementById('menu');
+
+        burgerBtn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // ปิดเมนูอัตโนมัติเมื่อคลิกเมนู
+        document.querySelectorAll('#menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // ลูกศรแสดงเลื่อนลง
+        const arrow = document.querySelector('.arrow-wrapper');
+        const web = document.getElementById('web');
+
+        window.addEventListener('scroll', () => {
+            const sectionRect = web.getBoundingClientRect();
+
+            if (sectionRect.bottom <= 0 || sectionRect.top >= window.innerHeight) {
+                arrow.classList.add('hidden'); // ซ่อนลูกศร
+            } else {
+                arrow.classList.remove('hidden'); // แสดงลูกศร
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>
